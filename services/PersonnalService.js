@@ -35,9 +35,7 @@ personnalService.add = function (req, res, reqBody) {
     try {
         if(!reqBody)throw new Error("İnput not valid");
         const data=JSON.parse(reqBody);
-        if(data){  
-           
-          
+        if(data){            
          var sql="INSERT INTO 'personnal'('Id','DepId','Name','Surname','DateOfBirth','Gender','Married','Salary') VALUES ";
          sql+=util.format("(%d,%d,'%s','%s','%s',%d,%d,%d)",null,data.DepId,data.Name,data.Surname,data.DateOfBirth ,data.Gender,data.Married,data.Salary);
                    
@@ -120,7 +118,7 @@ personnalService.delete = function (req, res, reqBody) {
         if(!reqBody)throw new Error("İnput not valid");
         const data=JSON.parse(reqBody);
         if(data){
-            if(!data.Id) throw new Error("No no provided")
+            if(!data.Id) throw new Error("Personnal Id no provided")
 
             var sql="DELETE FROM personnal";
                sql+=" WHERE Id="+data.Id;
