@@ -8,7 +8,7 @@ exports.executeDepSql = function (sql, callback) {
       callback(null,err);
     }else{
       console.log("Connection to the department");
-      conn.query(sql,(err,rows,fields)=>{
+      conn.query(sql,(err,rows)=>{
         if(err){
           console.log("Error in the query");
           callback(null,err);
@@ -28,7 +28,7 @@ exports.executePerSql = function (sql, callback) {
       callback(null,err);
     }else{
       console.log("Connection to the personnal");
-      conn.query(sql,(err,rows,fields)=>{
+      conn.query(sql,(err,rows)=>{
         if(err){
           console.log("Error in the query");
           callback(null,err);

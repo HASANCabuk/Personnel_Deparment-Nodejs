@@ -35,11 +35,14 @@ personnalService.add = function (req, res, reqBody) {
     try {
         if(!reqBody)throw new Error("İnput not valid");
         const data=JSON.parse(reqBody);
-        if(data){
-          var sql="INSERT INTO personnal (DepId,Name,Surname,Date of Birth,Gender,Married,Salary) VALUES";
-            sql+=util.format("(%d,'%s','%s','%s',%s,%s,%s)",data.DepId,data.Name,data.Surname,data.DateOfBirth,data.Gender,data.Married,data.Salary);
-          /* var sql="INSERT INTO personnal (DepId,Name,Surname,Date of Birth,Gender,Married,Salary) VALUES"+
-           "("+data.DepId+",'"+data.Name+"','"+data.Surname+"',"+data.DateOfBirth+","+data.Gender+","+data.Married+","+data.Salary+")";*/
+        if(data){  
+           
+          
+         var sql="INSERT INTO 'personnal'('Id','DepId','Name','Surname','DateOfBirth','Gender','Married','Salary') VALUES ";
+         sql+=util.format("(%d,%d,'%s','%s','%s',%d,%d,%d)",null,data.DepId,data.Name,data.Surname,data.DateOfBirth ,data.Gender,data.Married,data.Salary);
+                   
+         /*  var sql="INSERT INTO 'personnal'('Id','DepId','Name','Surname','DateOfBirth','Gender','Married','Salary') VALUES "+
+           "("+null+","+data.DepId+",'"+data.Name+"','"+data.Surname+"','"+data.DateOfBirth+"',"+data.Gender+","+data.Married+","+data.Salary+")";   */   
             db.executePerSql(sql,(data,err)=>{
             if (err) {
                 httpMsgs.show500(req,res,err);
@@ -61,40 +64,40 @@ personnalService.update = function (req, res, reqBody) {
         if(!reqBody)throw new Error("İnput not valid");
         const data=JSON.parse(reqBody);
         if(data){
-            if(!data.Id) throw new Error("No no provided")
+            if(!data.Id) throw new Error("Personnal Id no provided")
 
-            var sql="UPDATE students SET";
+            var sql="UPDATE Personnal SET ";
             var isDataProvided=false;
             if(data.DepId){
-                sql+=" DepId="+data.DepId+" ";
+                sql+="DepId="+data.DepId+",";
                 isDataProvided=true;
             }  
             if(data.Name){
-                sql+=" Name="+data.Name+" ";
+                sql+="Name='"+data.Name+"',";
                 isDataProvided=true;
             }     
            if(data.Surname){
-                sql+=" Surname="+data.Surname+" ";
+                sql+="Surname=''"+data.Surname+"',";
                 isDataProvided=true;
             }   
-            if(data.DateofBirth){
-                sql+="DateofBirth ="+data.DateofBirth+" ";
+            if(data.DateOfBirth){
+                sql+="DateOfBirth ='"+data.DateOfBirth+"',";
                 isDataProvided=true;
             }    
             if(data.Gender){
-                sql+="Gender ="+data.Gender+" ";
+                sql+="Gender ="+data.Gender+",";
                 isDataProvided=true;
             }   
-            if(data.Gender){
-                sql+="Married ="+data.Married+" ";
+            if(data.Married){
+                sql+="Married ="+data.Married+",";
                 isDataProvided=true;
             }   
-            if(data.Gender){
-                sql+="Salary="+data.Salary+" ";
+            if(data.Salary){
+                sql+="Salary="+data.Salary+",";
                 isDataProvided=true;
             }      
             sql=sql.slice(0,-1);//remove last comma
-            sql+=" WHERE No="+data.Id;
+            sql+=" WHERE Id="+data.Id;
             
             db.executePerSql(sql,(data,err)=>{
             if (err) {
@@ -120,7 +123,7 @@ personnalService.delete = function (req, res, reqBody) {
             if(!data.Id) throw new Error("No no provided")
 
             var sql="DELETE FROM personnal";
-               sql+=" WHERE No="+data.Id;
+               sql+=" WHERE Id="+data.Id;
             db.executePerSql(sql,(data,err)=>{
             if (err) {
                 httpMsgs.show500(req,res,err);
