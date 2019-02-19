@@ -4,7 +4,7 @@ const util=require("util");
 
 const departmantService ={};
 departmantService.getList = function (req, res) {
-    db.executeDepSql("SELECT * FROM department", (data, err) => {
+    db.executeSql("SELECT * FROM department","Department", (data, err) => {
      /* if(err){
           res.status(500).send(err);
       }else{
@@ -20,7 +20,7 @@ departmantService.getList = function (req, res) {
     });
 };
 departmantService.get = function (req, res, depId) {
-    db.executeDepSql("SELECT * FROM department WHERE Id="+depId, (data, err) => {
+    db.executeSql("SELECT * FROM department WHERE Id="+depId,"Department", (data, err) => {
             if (err) {
            httpMsgs.show500(req,res,err);
            }
@@ -34,11 +34,11 @@ departmantService.add = function (req, res, reqBody) {
     try {
         if(!reqBody)throw new Error("İnput not valid");
         const data=JSON.parse(reqBody);
-        if(data){
+        if(data){       
            // var sql="INSERT INTO students(Name) VALUES ('"+data.Name+"')";
-           var sql="INSERT INTO department  (Name) VALUES ";
-            sql+=util.format("('%s')",data.Name);
-            db.executeDepSql(sql,(data,err)=>{
+           var sql="INSERT INTO department  (Id,Name) VALUES ";
+            sql+=util.format("(%d,'%s')",null,data.Name);
+            db.executeSql(sql,"Department",(data,err)=>{
                 if (err) {
                     httpMsgs.show500(req,res,err);
                     }
@@ -71,7 +71,7 @@ departmantService.update = function (req, res, reqBody) {
             sql=sql.slice(0,-1);//remove last comma
             sql+=" WHERE Id="+data.Id;
             
-            db.executeDepSql(sql,(data,err)=>{
+            db.executeSql(sql,"Department",(data,err)=>{
             if (err) {
                 httpMsgs.show500(req,res,err);
                 }
@@ -96,7 +96,7 @@ departmantService.delete = function (req, res, reqBody) {
 
             var sql="DELETE FROM department";
                sql+=" WHERE Id="+data.Id;
-            db.executeDepSql(sql,(data,err)=>{
+            db.executeSql(sql,"Department",(data,err)=>{
             if (err) {
                 httpMsgs.show500(req,res,err);
                 }

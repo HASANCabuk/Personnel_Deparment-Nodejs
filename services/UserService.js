@@ -2,10 +2,10 @@ var db = require("../dbConnect");
 const httpMsgs=require("../Controllers/htttpMsg");
 const util=require("util");
 
-const personnalService ={};
+const userService ={};
 
-personnalService.getList = function (req, res) {
-    db.executeSql("SELECT * FROM personnal","Personnal", (data, err) => {
+userService.getList = function (req, res) {
+    db.executeSql("SELECT * FROM user","User", (data, err) => {
      /* if(err){
           res.status(500).send(err);
       }else{
@@ -20,8 +20,8 @@ personnalService.getList = function (req, res) {
 
     });
 };
-personnalService.get = function (req, res, perId) {
-    db.executeSql("SELECT * FROM personnal WHERE Id="+perId,"Personnal", (data, err) => {
+userService.get = function (req, res, usId) {
+    db.executeSql("SELECT * FROM user WHERE Id="+usId,"User", (data, err) => {
             if (err) {
            httpMsgs.show500(req,res,err);
            }
@@ -31,17 +31,14 @@ personnalService.get = function (req, res, perId) {
    
        });
 };
-personnalService.add = function (req, res, reqBody) {
+userService.add = function (req, res, reqBody) {
     try {
         if(!reqBody)throw new Error("İnput not valid");
         const data=JSON.parse(reqBody);
         if(data){            
-         var sql="INSERT INTO personnal(Id,DepId,Name,Surname,DateOfBirth,Gender,Married,Salary) VALUES ";
-         sql+=util.format("(%d,%d,'%s','%s','%s',%d,%d,%d)",null,data.DepId,data.Name,data.Surname,data.DateOfBirth ,data.Gender,data.Married,data.Salary);
-                   
-         /*  var sql="INSERT INTO 'personnal'('Id','DepId','Name','Surname','DateOfBirth','Gender','Married','Salary') VALUES "+
-           "("+null+","+data.DepId+",'"+data.Name+"','"+data.Surname+"','"+data.DateOfBirth+"',"+data.Gender+","+data.Married+","+data.Salary+")";   */   
-            db.executeSql(sql,"Personnal",(data,err)=>{
+         var sql="INSERT INTO user(Id,Name,Surname,Username,Role) VALUES ";
+         sql+=util.format("(%d,'%s','%s','%s','%s')",null,data.Name,data.Surname,data.Username,data.Role);
+            db.executeSql(sql,"User",(data,err)=>{
             if (err) {
                 httpMsgs.show500(req,res,err);
                 }
@@ -57,19 +54,15 @@ personnalService.add = function (req, res, reqBody) {
     }
 
 };
-personnalService.update = function (req, res, reqBody) {
+userService.update = function (req, res, reqBody) {
     try {
         if(!reqBody)throw new Error("İnput not valid");
         const data=JSON.parse(reqBody);
         if(data){
-            if(!data.Id) throw new Error("Personnal Id no provided")
+            if(!data.Id) throw new Error("User Id no provided")
 
-            var sql="UPDATE Personnal SET ";
-            var isDataProvided=false;
-            if(data.DepId){
-                sql+="DepId="+data.DepId+",";
-                isDataProvided=true;
-            }  
+            var sql="UPDATE user SET ";
+            var isDataProvided=false;    
             if(data.Name){
                 sql+="Name='"+data.Name+"',";
                 isDataProvided=true;
@@ -78,26 +71,18 @@ personnalService.update = function (req, res, reqBody) {
                 sql+="Surname=''"+data.Surname+"',";
                 isDataProvided=true;
             }   
-            if(data.DateOfBirth){
-                sql+="DateOfBirth ='"+data.DateOfBirth+"',";
+            if(data.Username){
+                sql+="Username ='"+data.Username+"',";
+                isDataProvided=true;
+            }          
+            if(data.Role){
+                sql+="Role ='"+data.Role+"',";
                 isDataProvided=true;
             }    
-            if(data.Gender){
-                sql+="Gender ="+data.Gender+",";
-                isDataProvided=true;
-            }   
-            if(data.Married){
-                sql+="Married ="+data.Married+",";
-                isDataProvided=true;
-            }   
-            if(data.Salary){
-                sql+="Salary="+data.Salary+",";
-                isDataProvided=true;
-            }      
             sql=sql.slice(0,-1);//remove last comma
             sql+=" WHERE Id="+data.Id;
             
-            db.executeSql(sql,"Personnal",(data,err)=>{
+            db.executeSql(sql,"User",(data,err)=>{
             if (err) {
                 httpMsgs.show500(req,res,err);
                 }
@@ -113,16 +98,16 @@ personnalService.update = function (req, res, reqBody) {
     }
 
 };
-personnalService.delete = function (req, res, reqBody) {
+userService.delete = function (req, res, reqBody) {
     try {
         if(!reqBody)throw new Error("İnput not valid");
         const data=JSON.parse(reqBody);
         if(data){
-            if(!data.Id) throw new Error("Personnal Id no provided")
+            if(!data.Id) throw new Error("User Id no provided")
 
-            var sql="DELETE FROM personnal";
+            var sql="DELETE FROM user";
                sql+=" WHERE Id="+data.Id;
-            db.executeSql(sql,"Personnal",(data,err)=>{
+            db.executeSql(sql,"User",(data,err)=>{
             if (err) {
                 httpMsgs.show500(req,res,err);
                 }
@@ -138,4 +123,4 @@ personnalService.delete = function (req, res, reqBody) {
     }
 };
 
-module.exports=personnalService;
+module.exports=userService;
