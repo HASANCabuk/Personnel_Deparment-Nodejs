@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const httpMsgs=require("../Controllers/htttpMsg");
+const httpMsgs=require("../helpers/htttpMsg");
 var personnalService=require("../services/PersonnalService");
 
 router.get('/',(req,res)=>{
@@ -16,7 +16,7 @@ router.get('/:per_id',(req,res)=>{
         var deppId=patt.exec(req.url);
        personnalService.get(req,res,deppId);
     }else{
-    httpMsgs.show404(req,res);
+    httpMsgs.show404(res);
     }
 });
 
@@ -26,7 +26,7 @@ router.post('/add',(req,res)=>{
         reqBody+=data;
         if(reqBody.length>1e7)//10MB
         {
-            httpMsgs.show413 (req,res); 
+            httpMsgs.show413 (res); 
         } 
     });
     req.on("end",()=>{
@@ -41,7 +41,7 @@ router.put('/update',(req,res)=>{
         reqBody+=data;
         if(reqBody.length>1e7)//10MB
         {
-            httpMsgs.show413 (req,res); 
+            httpMsgs.show413 (res); 
         } 
     });
     req.on("end",()=>{
@@ -56,7 +56,7 @@ router.delete('/delete',(req,res)=>{
         reqBody+=data;
         if(reqBody.length>1e7)//10MB
         {
-            httpMsgs.show413 (req,res); 
+            httpMsgs.show413 (res); 
         } 
     });
     req.on("end",()=>{

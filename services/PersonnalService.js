@@ -1,21 +1,16 @@
 var db = require("../dbConnect");
-const httpMsgs=require("../Controllers/htttpMsg");
+const httpMsgs=require("../helpers/htttpMsg");
 const util=require("util");
 
 const personnalService ={};
 
 personnalService.getList = function (req, res) {
     db.executeSql("SELECT * FROM personnal","Personnal", (data, err) => {
-     /* if(err){
-          res.status(500).send(err);
-      }else{
-          res.send(data);
-      }*/
          if (err) {
-        httpMsgs.show405(req,res,err);
+        httpMsgs.show405(res,err);
         }
         else {
-        httpMsgs.sendJson(req,res,data);        
+        httpMsgs.sendJson(res,data);        
         }
 
     });
@@ -23,10 +18,10 @@ personnalService.getList = function (req, res) {
 personnalService.get = function (req, res, perId) {
     db.executeSql("SELECT * FROM personnal WHERE Id="+perId,"Personnal", (data, err) => {
             if (err) {
-           httpMsgs.show500(req,res,err);
+           httpMsgs.show500(res,err);
            }
            else {
-           httpMsgs.sendJson(req,res,data);        
+           httpMsgs.sendJson(res,data);        
            }
    
        });
@@ -43,17 +38,17 @@ personnalService.add = function (req, res, reqBody) {
            "("+null+","+data.DepId+",'"+data.Name+"','"+data.Surname+"','"+data.DateOfBirth+"',"+data.Gender+","+data.Married+","+data.Salary+")";   */   
             db.executeSql(sql,"Personnal",(data,err)=>{
             if (err) {
-                httpMsgs.show500(req,res,err);
+                httpMsgs.show500(res,err);
                 }
                 else {
-                httpMsgs.send200(req,res);        
+                httpMsgs.send200(res);        
                 }
           });          
         }else{
             throw new Error("İnput not valid");
         }
     } catch (err) {
-        httpMsgs.show500(req,res,err);
+        httpMsgs.show500(res,err);
     }
 
 };
@@ -99,17 +94,17 @@ personnalService.update = function (req, res, reqBody) {
             
             db.executeSql(sql,"Personnal",(data,err)=>{
             if (err) {
-                httpMsgs.show500(req,res,err);
+                httpMsgs.show500(res,err);
                 }
                 else {
-                httpMsgs.send200(req,res);        
+                httpMsgs.send200(res);        
                 }
           });          
         }else{
             throw new Error("İnput not valid");
         }
     } catch (err) {
-        httpMsgs.show500(req,res,err);
+        httpMsgs.show500(res,err);
     }
 
 };
@@ -124,17 +119,17 @@ personnalService.delete = function (req, res, reqBody) {
                sql+=" WHERE Id="+data.Id;
             db.executeSql(sql,"Personnal",(data,err)=>{
             if (err) {
-                httpMsgs.show500(req,res,err);
+                httpMsgs.show500(res,err);
                 }
                 else {
-                httpMsgs.send200(req,res);        
+                httpMsgs.send200(res);        
                 }
           });          
         }else{
             throw new Error("İnput not valid");
         }
     } catch (err) {
-        httpMsgs.show500(req,res,err);
+        httpMsgs.show500(res,err);
     }
 };
 

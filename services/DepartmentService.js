@@ -1,20 +1,15 @@
 var db = require("../dbConnect");
-const httpMsgs=require("../Controllers/htttpMsg");
+const httpMsgs=require("../helpers/htttpMsg");
 const util=require("util");
 
 const departmantService ={};
 departmantService.getList = function (req, res) {
     db.executeSql("SELECT * FROM department","Department", (data, err) => {
-     /* if(err){
-          res.status(500).send(err);
-      }else{
-          res.send(data);
-      }*/
          if (err) {
-        httpMsgs.show405(req,res,err);
+        httpMsgs.show405(res,err);
         }
         else {
-        httpMsgs.sendJson(req,res,data);        
+        httpMsgs.sendJson(res,data);        
         }
 
     });
@@ -22,10 +17,10 @@ departmantService.getList = function (req, res) {
 departmantService.get = function (req, res, depId) {
     db.executeSql("SELECT * FROM department WHERE Id="+depId,"Department", (data, err) => {
             if (err) {
-           httpMsgs.show500(req,res,err);
+           httpMsgs.show500(res,err);
            }
            else {
-           httpMsgs.sendJson(req,res,data);        
+           httpMsgs.sendJson(res,data);        
            }
    
        });
@@ -40,17 +35,17 @@ departmantService.add = function (req, res, reqBody) {
             sql+=util.format("(%d,'%s')",null,data.Name);
             db.executeSql(sql,"Department",(data,err)=>{
                 if (err) {
-                    httpMsgs.show500(req,res,err);
+                    httpMsgs.show500(res,err);
                     }
                     else {
-                    httpMsgs.send200(req,res);        
+                    httpMsgs.send200(res);        
                     }
           });          
         }else{
             throw new Error("İnput not valid");
         }
     } catch (err) {
-        httpMsgs.show500(req,res,err);
+        httpMsgs.show500(res,err);
     }
 
 };
@@ -73,17 +68,17 @@ departmantService.update = function (req, res, reqBody) {
             
             db.executeSql(sql,"Department",(data,err)=>{
             if (err) {
-                httpMsgs.show500(req,res,err);
+                httpMsgs.show500(rres,err);
                 }
                 else {
-                httpMsgs.send200(req,res);        
+                httpMsgs.send200(res);        
                 }
           });          
         }else{
             throw new Error("İnput not valid");
         }
     } catch (err) {
-        httpMsgs.show500(req,res,err);
+        httpMsgs.show500(res,err);
     }
 
 };
@@ -98,17 +93,17 @@ departmantService.delete = function (req, res, reqBody) {
                sql+=" WHERE Id="+data.Id;
             db.executeSql(sql,"Department",(data,err)=>{
             if (err) {
-                httpMsgs.show500(req,res,err);
+                httpMsgs.show500(res,err);
                 }
                 else {
-                httpMsgs.send200(req,res);        
+                httpMsgs.send200(res);        
                 }
           });          
         }else{
             throw new Error("İnput not valid");
         }
     } catch (err) {
-        httpMsgs.show500(req,res,err);
+        httpMsgs.show500(res,err);
     }
 };
 

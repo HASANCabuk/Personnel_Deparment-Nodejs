@@ -1,21 +1,16 @@
 var db = require("../dbConnect");
-const httpMsgs=require("../Controllers/htttpMsg");
+const httpMsgs=require("../helpers/htttpMsg");
 const util=require("util");
 
 const userService ={};
 
 userService.getList = function (req, res) {
     db.executeSql("SELECT * FROM user","User", (data, err) => {
-     /* if(err){
-          res.status(500).send(err);
-      }else{
-          res.send(data);
-      }*/
          if (err) {
-        httpMsgs.show405(req,res,err);
+        httpMsgs.show405(res,err);
         }
         else {
-        httpMsgs.sendJson(req,res,data);        
+        httpMsgs.sendJson(res,data);        
         }
 
     });
@@ -23,10 +18,10 @@ userService.getList = function (req, res) {
 userService.get = function (req, res, usId) {
     db.executeSql("SELECT * FROM user WHERE Id="+usId,"User", (data, err) => {
             if (err) {
-           httpMsgs.show500(req,res,err);
+           httpMsgs.show500(res,err);
            }
            else {
-           httpMsgs.sendJson(req,res,data);        
+           httpMsgs.sendJson(res,data);        
            }
    
        });
@@ -38,19 +33,19 @@ userService.add = function (req, res, reqBody) {
         if(data){            
          var sql="INSERT INTO user(Id,Name,Surname,Username,Role) VALUES ";
          sql+=util.format("(%d,'%s','%s','%s','%s')",null,data.Name,data.Surname,data.Username,data.Role);
-            db.executeSql(sql,"User",(data,err)=>{
+            db.executeSql(sql,"User",(err)=>{
             if (err) {
-                httpMsgs.show500(req,res,err);
+                httpMsgs.show500(res,err);
                 }
                 else {
-                httpMsgs.send200(req,res);        
+                httpMsgs.send200(res);        
                 }
           });          
         }else{
             throw new Error("İnput not valid");
         }
     } catch (err) {
-        httpMsgs.show500(req,res,err);
+        httpMsgs.show500(res,err);
     }
 
 };
@@ -82,19 +77,19 @@ userService.update = function (req, res, reqBody) {
             sql=sql.slice(0,-1);//remove last comma
             sql+=" WHERE Id="+data.Id;
             
-            db.executeSql(sql,"User",(data,err)=>{
+            db.executeSql(sql,"User",(err)=>{
             if (err) {
-                httpMsgs.show500(req,res,err);
+                httpMsgs.show500(res,err);
                 }
                 else {
-                httpMsgs.send200(req,res);        
+                httpMsgs.send200(res);        
                 }
           });          
         }else{
             throw new Error("İnput not valid");
         }
     } catch (err) {
-        httpMsgs.show500(req,res,err);
+        httpMsgs.show500(res,err);
     }
 
 };
@@ -107,19 +102,19 @@ userService.delete = function (req, res, reqBody) {
 
             var sql="DELETE FROM user";
                sql+=" WHERE Id="+data.Id;
-            db.executeSql(sql,"User",(data,err)=>{
+            db.executeSql(sql,"User",(err)=>{
             if (err) {
-                httpMsgs.show500(req,res,err);
+                httpMsgs.show500(res,err);
                 }
                 else {
-                httpMsgs.send200(req,res);        
+                httpMsgs.send200(res);        
                 }
           });          
         }else{
             throw new Error("İnput not valid");
         }
     } catch (err) {
-        httpMsgs.show500(req,res,err);
+        httpMsgs.show500(res,err);
     }
 };
 

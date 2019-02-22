@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-const httpMsgs=require("../Controllers/htttpMsg");
+const httpMsgs=require("../helpers/htttpMsg");
 var userService=require("../services/UserService");
 
 router.get('/',(req,res)=>{
@@ -16,7 +16,7 @@ router.get('/:user_id',(req,res)=>{
         var deppId=patt.exec(req.url);
         userService.get(req,res,deppId);
     }else{
-    httpMsgs.show404(req,res);
+    httpMsgs.show404(res);
     }
 });
 
@@ -26,7 +26,7 @@ router.post('/add',(req,res)=>{
         reqBody+=data;
         if(reqBody.length>1e7)//10MB
         {
-            httpMsgs.show413 (req,res); 
+            httpMsgs.show413 (res); 
         } 
     });
     req.on("end",()=>{
@@ -41,7 +41,7 @@ router.put('/update',(req,res)=>{
         reqBody+=data;
         if(reqBody.length>1e7)//10MB
         {
-            httpMsgs.show413 (req,res); 
+            httpMsgs.show413 (res); 
         } 
     });
     req.on("end",()=>{
@@ -50,13 +50,13 @@ router.put('/update',(req,res)=>{
 
 });
 
-router.delete('/delete',(req,res)=>{
+router.delete('/delete',(res)=>{
     var reqBody='';
     req.on("data",(data)=>{
         reqBody+=data;
         if(reqBody.length>1e7)//10MB
         {
-            httpMsgs.show413 (req,res); 
+            httpMsgs.show413 (res); 
         } 
     });
     req.on("end",()=>{
